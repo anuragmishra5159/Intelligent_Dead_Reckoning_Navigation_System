@@ -1418,6 +1418,8 @@ h2.sec-title {
   border: 1px solid #262630;
   color: #8A8A93;
   border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .top-center {
@@ -1512,11 +1514,11 @@ h2.sec-title {
   grid-column: 1 / 2;
   background: transparent;
   border-right: 1px solid var(--line);
-  padding: 24px;
+  padding: 16px 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .telem-group {
@@ -1606,6 +1608,23 @@ h2.sec-title {
   font-size: 11px;
   color: #AAA;
   cursor: pointer;
+  padding: 2px 0;
+  user-select: none;
+}
+.telem-layer-item:hover {
+  color: #FFF;
+}
+.layer-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.layer-color-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .telem-layer-item input.layer-toggle-input {

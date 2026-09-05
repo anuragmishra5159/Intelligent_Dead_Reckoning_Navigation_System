@@ -13,14 +13,27 @@ export const TimelineSlider: React.FC = () => {
     return `${m}:${String(s).padStart(2, '0')}`;
   };
 
-  const handleSeek = (e: React.MouseEvent) => {
+  const isDraggingRef = useRef(false);
+
+  const updateProgressFromClientX = (clientX: number) => {
     if (!trackRef.current) return;
     const r = trackRef.current.getBoundingClientRect();
-    const newProg = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+    const newProg = Math.max(0, Math.min(1, (clientX - r.left) / r.width));
     setProgress(newProg);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {}
+    updateProgressFromClientX(e.clientX);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (isDraggingRef.current) {
+      updateProgressFromClientX(e.clientX);
+    }
     if (!trackRef.current) return;
     const r = trackRef.current.getBoundingClientRect();
     const relX = Math.max(0, Math.min(r.width, e.clientX - r.left));
@@ -32,8 +45,24 @@ export const TimelineSlider: React.FC = () => {
     });
   };
 
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {}
+    }
+  };
+
   const handleMouseLeave = () => {
-    setHoverPos(null);
+    if (!isDraggingRef.current) {
+      setHoverPos(null);
+    }
+  };
+
+  const handleOutageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setProgress(OUTAGE_START + 0.005); // Jump straight into outage zone
   };
 
   const currentSec = Math.floor(progress * TOTAL_DURATION);
@@ -47,8 +76,10 @@ export const TimelineSlider: React.FC = () => {
       <div 
         className="tl-track" 
         ref={trackRef} 
-        onClick={handleSeek}
-        onMouseMove={handleMouseMove}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         onMouseLeave={handleMouseLeave}
       >
         {/* Fill progress */}
@@ -59,9 +90,11 @@ export const TimelineSlider: React.FC = () => {
           className="tl-out" 
           style={{ 
             left: `${effectiveOS * 100}%`, 
-            width: `${(effectiveOE - effectiveOS) * 100}%` 
+            width: `${(effectiveOE - effectiveOS) * 100}%`,
+            cursor: 'pointer'
           }}
-          title="GNSS Outage Window (200s - 260s)"
+          onClick={handleOutageClick}
+          title="Click to jump directly to GNSS Outage (200s - 260s)"
         >
           <span className="tl-out-label">JAMMING // 60s OUTAGE</span>
         </div>

@@ -102,7 +102,10 @@ export const Sidebar: React.FC = () => {
               className="layer-toggle-input"
             />
             <div className="layer-toggle-slider slider-gt"></div>
-            <span className="layer-name">Ground Truth</span>
+            <span className="layer-name">
+              <span className="layer-color-dot" style={{ background: '#5A5A64' }}></span>
+              Ground Truth
+            </span>
           </label>
 
           <label className="telem-layer-item">
@@ -113,7 +116,10 @@ export const Sidebar: React.FC = () => {
               className="layer-toggle-input"
             />
             <div className="layer-toggle-slider slider-gnss"></div>
-            <span className="layer-name">GNSS Raw</span>
+            <span className="layer-name">
+              <span className="layer-color-dot" style={{ background: '#2DD4BF' }}></span>
+              GNSS Raw
+            </span>
           </label>
 
           <label className="telem-layer-item">
@@ -124,7 +130,10 @@ export const Sidebar: React.FC = () => {
               className="layer-toggle-input"
             />
             <div className="layer-toggle-slider slider-fused"></div>
-            <span className="layer-name">AERIS ES-EKF</span>
+            <span className="layer-name">
+              <span className="layer-color-dot" style={{ background: '#F0801E' }}></span>
+              AERIS ES-EKF
+            </span>
           </label>
 
           <label className="telem-layer-item">
@@ -135,7 +144,10 @@ export const Sidebar: React.FC = () => {
               className="layer-toggle-input"
             />
             <div className="layer-toggle-slider slider-smoothed"></div>
-            <span className="layer-name">RTS Smoothed (Analysis)</span>
+            <span className="layer-name">
+              <span className="layer-color-dot" style={{ background: '#A855F7' }}></span>
+              RTS Smoothed (Analysis)
+            </span>
           </label>
         </div>
 
